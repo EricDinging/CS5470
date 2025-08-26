@@ -8,6 +8,12 @@ When you first connect to Perlmutter, you will be on the login node! This is the
 
 If you have any questions about the account process or system, please feel free to contact the NERSC help desk via their [ticket system](https://nersc.servicenowservices.com/sp).
 
+## Prepare conda environment
+```
+# on login node
+module load conda
+```
+
 
 
 
