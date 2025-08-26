@@ -13,34 +13,55 @@ This homework focuses on setting up and benchmarking the vLLM inference server (
 - Benchmark generation performance
 - Understand the breakdown of GPU execution time during LLM inference
 
-## Prerequisites
+Do not start in the last minute! Request approval for model access on Huggingface takes time!
+
+## Perequisites
 
 ### Hardware Access
 You will be provided access to the **Perlmutter HPC** where you can reserve a server with 4 A100 GPUs, each having 80 GB of memory. Follow the steps in the email to reserve servers.
 
 ### Setup Instructions
 
-#### Step 1: Setup Miniconda
+#### Step 1: Setup Conda and VLLM
 
 Set up the conda environment and clone the vLLM repository with the specified commit. Install conda if it is not available on the GPU server using the [Linux terminal installer](https://www.anaconda.com/docs/getting-started/miniconda/install#linux-terminal-installer).
 
 **Setup Commands:**
 ```bash
-conda create --name course python=3.10.12
-conda activate course
+conda create --name sysml python=3.10.12
+conda activate sysml
 
 git clone https://github.com/vllm-project/vllm/
 cd vllm
 # The version we are using for this homework
-git reset --hard 5fbbfe9a4c13094ad72ed3d6b4ef208a7ddc0fd7
+#git reset --hard 5fbbfe9a4c13094ad72ed3d6b4ef208a7ddc0fd7
+
+# working version 2f13319f47eb9a78b471c5ced0fcf90862cd16a2
 
 # Install vLLM with precompiled binaries
 VLLM_USE_PRECOMPILED=1 python3 -m pip install -e .
 ```
 
-#### Step 2: Homework Files
+<!-- If you run into disk quota issue, you could try 
 
-Copy the homework zip file into the vLLM source's root directory and uncompress it.
+https://docs.nersc.gov/filesystems/perlmutter-scratch/
+
+/pscratch/sd/FirstLetterOfUserName/YourUserName
+
+```
+conda create -p /pscratch/sd/e/$USER/sysml python=3.10.12
+
+
+``` -->
+#### Step 2: Huggingface access
+Requesting model access
+
+```
+huggingface-cli login
+```
+<!-- TODO Do we need this 
+
+Copy the homework zip file into the vLLM source's root directory and uncompress it. -->
 
 ## Homework Tasks
 
@@ -53,7 +74,11 @@ Within the homework folder, we have provided `server.sh`, a script that starts a
 **Requirements:**
 1. Start the Llama 3.1 8B model on 1 GPU using the command provided in `server.sh`
 2. Execute the benchmark script using the command in `client.sh`
+TODO on a different terminal but on the same node
 3. Store the TTFT (Time To First Token) and TPOT (Time Per Output Token) for each prompt from the output
+
+TODO: hint: remember to make those scripts executable
+TODO: does not show the port
 
 ### Task 2: Multi-GPU Benchmarking
 
@@ -112,3 +137,11 @@ We have provided a simple Python script called `complete.py` to test this functi
 ---
 
 *Note: Replace [COURSE NUMBER] and [Yesterday] with actual course information and due date.*
+
+
+## TODO
+1. RuntimeError: operator _C::marlin_qqq_gemm does not exist
+   <!-- Build from allocated nodes, not login node? -->
+2. TODO You may run into version issues 
+   https://github.com/vllm-project/vllm-ascend/issues/2046
+
