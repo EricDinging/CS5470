@@ -67,8 +67,10 @@ This is required as vLLM could not download models on-the-fly on GPU nodes due t
 
 In this assignment, we suggest using `Qwen/Qwen2.5-1.5B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB) and is not gated. However, feel free to use other models.
 
+In the first task, we are using `meta-llama/Llama-3.2-3B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB). For later tasks, a bigger model will be used.
+
 ```
-python download.py --model-id Qwen/Qwen2.5-1.5B-Instruct
+python download.py --model-id meta-llama/Llama-3.2-3B-Instruct
 ```
 <!-- TODO Do we need this 
 
