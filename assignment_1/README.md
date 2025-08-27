@@ -1,9 +1,7 @@
-# Cornell University - HW1: vLLM Benchmarking and Profiling
+# CS5470 - HW1: vLLM Benchmarking and Profiling
+**Due Date:** [Yesterday] 
 
-## Course Information
-- **Course:** [COURSE NUMBER]
-- **Assignment:** HW1: vLLM Benchmarking and Profiling
-- **Due Date:** [Yesterday]
+Please start this assignment as early as possible!
 
 ## Overview
 
@@ -12,8 +10,6 @@ This homework focuses on setting up and benchmarking the vLLM inference server (
 - Set up the inference server
 - Benchmark generation performance
 - Understand the breakdown of GPU execution time during LLM inference
-
-Do not start in the last minute! Request approval for model access on Huggingface takes time!
 
 ## Perequisites
 
@@ -24,19 +20,22 @@ You will be provided access to the **Perlmutter HPC** where you can reserve a se
 
 #### Step 1: Setup Conda and VLLM
 
-Set up the conda environment and clone the vLLM repository with the specified commit. Install conda if it is not available on the GPU server using the [Linux terminal installer](https://www.anaconda.com/docs/getting-started/miniconda/install#linux-terminal-installer).
+Set up the conda environment and clone the vLLM repository with the specified commit. 
+
+<!-- Install conda if it is not available on the GPU server using the [Linux terminal installer](https://www.anaconda.com/docs/getting-started/miniconda/install#linux-terminal-installer). -->
 
 **Setup Commands:**
 ```bash
+# On login node, load conda
+module load conda
 conda create --name sysml python=3.10.12
 conda activate sysml
 
 git clone https://github.com/vllm-project/vllm/
 cd vllm
-# The version we are using for this homework
-#git reset --hard 5fbbfe9a4c13094ad72ed3d6b4ef208a7ddc0fd7
 
-# working version 2f13319f47eb9a78b471c5ced0fcf90862cd16a2
+# Use the version we are using for this homework
+git reset --hard 2f13319f47eb9a78b471c5ced0fcf90862cd16a2
 
 # Install vLLM with precompiled binaries
 VLLM_USE_PRECOMPILED=1 python3 -m pip install -e .
@@ -54,10 +53,22 @@ conda create -p /pscratch/sd/e/$USER/sysml python=3.10.12
 
 ``` -->
 #### Step 2: Huggingface access
-Requesting model access
+ Request model access (required if you want to explore deploying other models that are gated)
+
+```bash
+# Step 1: Create Huggingface account
+# Step 2:
+huggingface-cli login
+# Step 3:
+# Create token and paste in the command line
+```
+#### Step 3: Download model and tokenizer
+This is required as vLLM could not download models on-the-fly on GPU nodes due to internet access restriction.
+
+In this assignment, we suggest using `Qwen/Qwen2.5-1.5B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB) and is not gated. However, feel free to use other models.
 
 ```
-huggingface-cli login
+python download.py --model-id Qwen/Qwen2.5-1.5B-Instruct
 ```
 <!-- TODO Do we need this 
 
@@ -69,22 +80,23 @@ This homework is designed to teach how to serve LLMs on modern GPUs. You will le
 
 ### Task 1: Single GPU Benchmarking
 
-Within the homework folder, we have provided `server.sh`, a script that starts a vLLM instance running Llama 3.1 8B on GPU-0 of the server and exposes an OpenAI compatible HTTP server.
+Within the homework folder, we have provided `server.sh`, a script that starts a vLLM instance running LLM on GPU-0 of the server and exposes a vLLM API.
 
 **Requirements:**
-1. Start the Llama 3.1 8B model on 1 GPU using the command provided in `server.sh`
+1. Start the serving workload on 1 GPU using the command provided in `server.sh`
 2. Execute the benchmark script using the command in `client.sh`
-TODO on a different terminal but on the same node
 3. Store the TTFT (Time To First Token) and TPOT (Time Per Output Token) for each prompt from the output
 
-TODO: hint: remember to make those scripts executable
-TODO: does not show the port
+**Hint:**
+1. Allocate interactive GPU node using `salloc --nodes 1 --qos interactive --time 01:00:00 --constraint gpu --gpus 1 --account <projectID>`. One GPU is enough.
+2. Remember to make those scripts executable.
+3. Spawning two terminals would be useful, one for server and one for client. They should be on the same GPU node. Use `ssh <GPU_node_ID>`.
 
 ### Task 2: Multi-GPU Benchmarking
 
 **Requirements:**
-1. Execute Llama 3.1 70B on 2 GPUs (GPUs 0, 1)
-2. Execute Llama 3.1 70B on 4 GPUs (GPUs 0-3)
+1. Execute Llama 3.1 8B on 2 GPUs (GPUs 0, 1)
+2. Execute Llama 3.1 8B on 4 GPUs (GPUs 0-3)
 3. Modify parameters in `server.sh` and `client.sh` files to execute these configurations
    - Review the vLLM documentation to understand what CLI arguments you need to add or modify for multi-GPU inference
 4. Store the TTFT and TPOT metrics for both configurations
@@ -92,7 +104,7 @@ TODO: does not show the port
 ### Task 3: Performance Visualization
 
 Create plots showing:
-1. Sorted TTFTs of prompts in the benchmark (for all three configurations: 8B/1GPU, 70B/2GPUs, 70B/4GPUs)
+1. Sorted TTFTs of prompts in the benchmark (for all three configurations: Qwen2.5-1.5B/1GPU, Llama-3.1-8B/2GPUs, Llama-3.1-8B/4GPUs)
 2. Sorted TPOTs of prompts in the benchmark (for all three configurations)
 
 ### Task 4: NVIDIA Nsight Profiling
@@ -100,7 +112,7 @@ Create plots showing:
 **Requirements:**
 1. Install NVIDIA Nsight Systems if not available from the [official website](https://developer.nvidia.com/nsight-systems/get-started)
    - Use the CLI-only deb installer for Linux
-2. Generate an Nsight trace using the `nsys` profiler for Llama 70B on 2 GPUs
+2. Generate an Nsight trace using the `nsys` profiler for Llama-3.1-8B on 2 GPUs
 3. Open the generated `.nsys-rep` file in Nsight desktop client on your laptop
 4. Use the Stats System View to identify the top 3 kernels that consumed the most time
 
@@ -135,13 +147,4 @@ We have provided a simple Python script called `complete.py` to test this functi
 - Understand how LLM applications like ChatGPT and Claude manage conversation history
 
 ---
-
-*Note: Replace [COURSE NUMBER] and [Yesterday] with actual course information and due date.*
-
-
-## TODO
-1. RuntimeError: operator _C::marlin_qqq_gemm does not exist
-   <!-- Build from allocated nodes, not login node? -->
-2. TODO You may run into version issues 
-   https://github.com/vllm-project/vllm-ascend/issues/2046
 
