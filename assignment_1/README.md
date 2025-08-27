@@ -53,25 +53,31 @@ conda create -p /pscratch/sd/e/$USER/sysml python=3.10.12
 
 ``` -->
 #### Step 2: Huggingface access
- Request model access (required if you want to explore deploying other models that are gated)
-
-```bash
-# Step 1: Create Huggingface account
-# Step 2:
-huggingface-cli login
-# Step 3:
-# Create token and paste in the command line
-```
+1. Create Huggingface account and request for model access. This could take hours if you haven't done it before.
+- `meta-llama/Llama-3.2-3B-Instruct`
+- `meta-llama/Llama-3.1-8B`
+2. Log in your account from command line
+   ```bash
+   huggingface-cli login
+   # Create token through the url and copy-paste
+   ```
 #### Step 3: Download model and tokenizer
-This is required as vLLM could not download models on-the-fly on GPU nodes due to internet access restriction.
+This is required as vLLM could not download models on-the-fly on GPU nodes due to restrictions on large file download.
 
-In this assignment, we suggest using `Qwen/Qwen2.5-1.5B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB) and is not gated. However, feel free to use other models.
+<!-- In this assignment, we suggest using `Qwen/Qwen2.5-1.5B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB) and is not gated. However, feel free to use other models. -->
 
-In the first task, we are using `meta-llama/Llama-3.2-3B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB). For later tasks, a bigger model will be used.
+In the first task, we are using `meta-llama/Llama-3.2-3B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB). For later tasks, `meta-llama/Llama-3.1-8B` will be used.
 
 ```
-python download.py --model-id meta-llama/Llama-3.2-3B-Instruct
+python download.py --model-id meta-llama/Llama-3.2-3B-Instruct ----cache-dir /pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface
+
+python download.py --model-id meta-llama/Llama-3.1-8B ----cache-dir /pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface
 ```
+
+**Note**: Due to disk space limitation on `home` file system, we encourage using `pscratch` for storing model weights. More information could be found [here](https://docs.nersc.gov/filesystems/perlmutter-scratch/).
+
+**Note**: remember to set environment variable `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface` in your running environment!
+
 <!-- TODO Do we need this 
 
 Copy the homework zip file into the vLLM source's root directory and uncompress it. -->
@@ -82,31 +88,33 @@ This homework is designed to teach how to serve LLMs on modern GPUs. You will le
 
 ### Task 1: Single GPU Benchmarking
 
-Within the homework folder, we have provided `server.sh`, a script that starts a vLLM instance running LLM on GPU-0 of the server and exposes a vLLM API.
+Within the homework folder, we have provided `server.sh`, a script that starts a `meta-llama/Llama-3.2-3B-Instruct` instance on GPU 0 and exposes a vLLM API.
 
 **Requirements:**
-1. Start the serving workload on 1 GPU using the command provided in `server.sh`
-2. Execute the benchmark script using the command in `client.sh`
-3. Store the TTFT (Time To First Token) and TPOT (Time Per Output Token) for each prompt from the output
+1. Allocate a node with 1 GPU.
+2. Start the serving workload on 1 GPU using the command provided in `server.sh`
+3. Execute the benchmark script using the command in `client.sh`
+4. Store the TTFT (Time To First Token) and TPOT (Time Per Output Token) for each prompt from the output
 
 **Hint:**
 1. Allocate interactive GPU node using `salloc --nodes 1 --qos interactive --time 01:00:00 --constraint gpu --gpus 1 --account <projectID>`. One GPU is enough.
 2. Remember to make those scripts executable.
-3. Spawning two terminals would be useful, one for server and one for client. They should be on the same GPU node. Use `ssh <GPU_node_ID>`.
+3. Spawning two terminals would be useful, one for server and one for client. They should be on the same GPU node. Access the allocated node using `ssh <GPU_node_ID>` if the other terminal is on the login node.
+4. You need to login to Huggingface again on GPU nodes, and set `HF_HOME` to `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface`.
 
 ### Task 2: Multi-GPU Benchmarking
 
 **Requirements:**
-1. Execute Llama 3.1 8B on 2 GPUs (GPUs 0, 1)
-2. Execute Llama 3.1 8B on 4 GPUs (GPUs 0-3)
-3. Modify parameters in `server.sh` and `client.sh` files to execute these configurations
+1. Serve `meta-llama/Llama-3.1-8B` on 2 GPUs.
+2. Serve `meta-llama/Llama-3.1-8B` on 4 GPUs.
+3. Modify parameters in `server.sh` and `client.sh` files to execute these configurations.
    - Review the vLLM documentation to understand what CLI arguments you need to add or modify for multi-GPU inference
 4. Store the TTFT and TPOT metrics for both configurations
 
 ### Task 3: Performance Visualization
 
 Create plots showing:
-1. Sorted TTFTs of prompts in the benchmark (for all three configurations: Qwen2.5-1.5B/1GPU, Llama-3.1-8B/2GPUs, Llama-3.1-8B/4GPUs)
+1. Sorted TTFTs of prompts in the benchmark (for all three configurations: `meta-llama/Llama-3.2-3B-Instruct` with 1 GPU, `meta-llama/Llama-3.1-8B` with 2GPUs, `meta-llama/Llama-3.1-8B` with 4 GPUs)
 2. Sorted TPOTs of prompts in the benchmark (for all three configurations)
 
 ### Task 4: NVIDIA Nsight Profiling
