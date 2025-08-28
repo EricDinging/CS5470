@@ -1,0 +1,6 @@
+Time	Total Time	Instances	Avg	Med	Min	Max	StdDev	Name
+25.7%	11.445 s	191490	59.767 μs	14.176 μs	4.832 μs	127.144 ms	310.702 μs	void vllm::cross_device_reduce_1stage<__nv_bfloat16, (int)2>(vllm::RankData *, vllm::RankSignals, vllm::Signal *, T1 *, int, int)
+15.5%	6.917 s	99648	69.416 μs	92.832 μs	18.752 μs	114.975 μs	35.442 μs	ampere_bf16_s16816gemm_bf16_128x64_ldg8_f2f_stages_64x4_tn
+12.0%	5.333 s	166464	32.034 μs	25.248 μs	16.448 μs	56.607 μs	15.107 μs	ampere_bf16_s16816gemm_bf16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn
+9.7%	4.301 s	27904	154.137 μs	154.942 μs	110.143 μs	190.879 μs	14.869 μs	void flash::flash_fwd_splitkv_kernel<Flash_fwd_kernel_traits<(int)128, (int)64, (int)128, (int)4, (bool)0, (bool)0, cutlass::bfloat16_t, Flash_kernel_traits<(int)128, (int)64, (int)128, (int)4, cutlass::bfloat16_t>>, (bool)0, (bool)0, (bool)0, (bool)0, (bool)1, (bool)0, (bool)0, (bool)0>(flash::Flash_fwd_params)
+6.9%	3.074 s	28644	107.327 μs	98.079 μs	94.815 μs	409.950 μs	51.803 μs	ampere_bf16_s16816gemm_bf16_256x64_ldg8_f2f_stages_64x3_tn

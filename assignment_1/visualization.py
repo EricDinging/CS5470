@@ -2,40 +2,44 @@ import re
 import matplotlib.pyplot as plt
 
 # Change this to your log file
-file_path = "tp1-10.txt"
+file_paths = ["tp1-10.txt", "tp2-10.txt", "tp4-10.txt"]
 
 # Read file
-with open(file_path, "r") as f:
-    lines = f.readlines()
 
-# Regex to extract TTFT and START
-# pattern = re.compile(r"TTFT:\s*([\d\.]+).*START:\s*([\d\.]+)")
-pattern = re.compile(r"TPOT:\s*([\d\.]+).*START:\s*([\d\.]+)")
+def plot(file_path):
+    with open(file_path, "r") as f:
+        lines = f.readlines()
 
-data = []
-for i, line in enumerate(lines):
-    match = pattern.search(line)
-    if match:
-        ttpt = float(match.group(1))
-        start = float(match.group(2))
-        data.append((i, start, ttpt))  # (line_index, START, TTFT)
+    # Regex to extract TTFT and START
+    # pattern = re.compile(r"TTFT:\s*([\d\.]+).*START:\s*([\d\.]+)")
+    pattern = re.compile(r"TPOT:\s*([\d\.]+).*START:\s*([\d\.]+)")
 
-# Sort by TTFT
-data_sorted = sorted(data, key=lambda x: x[2])
+    data = []
+    for i, line in enumerate(lines):
+        match = pattern.search(line)
+        if match:
+            tpot = float(match.group(1))
+            start = float(match.group(2))
+            data.append((i, start, tpot))  # (line_index, START, TTFT)
 
-# Extract for plotting
-prompt_ids = [d[0] for d in data_sorted]
-ttpts = [d[2] for d in data_sorted]
+    # Sort by TTFT
+    data_sorted = sorted(data, key=lambda x: x[2])
+
+    # Extract for plotting
+    tpots = [d[2] for d in data_sorted]
+    plt.plot(range(len(tpots)), tpots, label=file_path)
 
 # Plot
 plt.figure(figsize=(12,6))
-plt.bar(range(len(ttpts)), ttpts, tick_label=prompt_ids)
-plt.xticks(rotation=90)
+
+for file_path in file_paths:
+    plot(file_path)
 plt.xlabel("Prompt ID (line index)")
-plt.ylabel("TTPT (s)")
-plt.title("Prompt TTPT (sorted)")
+plt.ylabel("tpots (s)")
 plt.tight_layout()
+
+plt.legend()
 # plt.show()
 
-plt.savefig("ttpt_plot_1.pdf")
+plt.savefig("tpot_plot.pdf")
 plt.close()

@@ -44,7 +44,7 @@
 
 
 CUDA_VISIBLE_DEVICES=0,1 \
-nsys profile --trace-fork-before-exec=true --cuda-graph-trace=node --delay 60 \
+nsys launch --trace-fork-before-exec=true --cuda-graph-trace=node \
     python3 -m vllm.entrypoints.openai.api_server \
         --model meta-llama/Llama-3.1-8B \
         --swap-space 16 \
