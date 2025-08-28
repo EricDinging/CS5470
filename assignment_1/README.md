@@ -53,7 +53,7 @@ conda create -p /pscratch/sd/e/$USER/sysml python=3.10.12
 
 ``` -->
 #### Step 2: Huggingface access
-1. Create Huggingface account and request for model access. This could take hours if you haven't done it before.
+1. Create Huggingface account and request for model access.
 - `meta-llama/Llama-3.1-8B`
 2. Log in your account from command line
    ```bash
@@ -87,13 +87,14 @@ Within the homework folder, we have provided `server.sh`, a script that starts a
 1. Allocate a node with 1 GPU.
 2. Start the serving workload on 1 GPU using the command provided in `server.sh`
 3. Execute the benchmark script using the command in `client.sh`
-4. Store the TTFT (Time To First Token) and TPOT (Time Per Output Token) for each prompt from the output
+4. Store the TTFT (Time To First Token) and TPOT (Time Per Output Token) for each prompt from the output in a txt file.
 
 **Hint:**
 1. Allocate interactive GPU node using `salloc --nodes 1 --qos interactive --time 01:00:00 --constraint gpu --gpus 1 --account <projectID>`.
 2. Remember to make those scripts executable.
 3. Spawning two terminals would be useful, one for server and one for client. They should be on the same GPU node. Access the allocated node using `ssh <GPU_node_ID>` if the other terminal is on the login node.
-4. You need to login to Huggingface again on GPU nodes, and set `HF_HOME` to `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface`.
+4. You need to login to Huggingface again on GPU nodes, and set `HF_HOME` to `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface` for both server and client terminal.
+5. You might wait for several minutes until the serving engine is up and running.
 
 ### Task 2: Multi-GPU Benchmarking
 
@@ -106,20 +107,25 @@ Within the homework folder, we have provided `server.sh`, a script that starts a
 
 ### Task 3: Performance Visualization
 
-Create plots showing:
-1. Sorted TTFTs of prompts in the benchmark for all three configurations: serving with 1, 2, and 4 GPUs.
-2. Sorted TPOTs of prompts in the benchmark for all three configurations
+Create two plots showing:
+1. Sorted TTFTs of prompts in the benchmark from all three configurations: serving with 1, 2, and 4 GPUs.
+2. Sorted TPOTs of prompts in the benchmark from all three configurations
 
-X-axis is the prompt index and the y-axis is TTFT or TTFT.
+X-axis is the prompt index (not the original index of prompt) and the y-axis is TTFT or TTFT. Add labels to indicate the configuration.
 
 ### Task 4: NVIDIA Nsight Profiling
-
 **Requirements:**
 1. Install NVIDIA Nsight Systems if not available from the [official website](https://developer.nvidia.com/nsight-systems/get-started)
    - Use the CLI-only deb installer for Linux
+   - The current version on Perlmutter may not work for us.
 2. Generate an Nsight trace using the `nsys` profiler for Llama-3.1-8B on 2 GPUs
 3. Open the generated `.nsys-rep` file in Nsight desktop client on your laptop
 4. Use the Stats System View to identify the top 3 kernels that consumed the most time
+5. Identify one AllReduce kernel and take a screenshot.
+
+**Hint**
+1. Use interactive profiling mode.
+2. Store the `nsys-rep` file under `pscratch`.
 
 ## Deliverables
 
@@ -128,9 +134,10 @@ X-axis is the prompt index and the y-axis is TTFT or TTFT.
 Submit the following components:
 
 #### 1. Report (PDF format)
-- All requested plots (TTFT and TPOT visualizations) and a brief analysis.
+- All requested plots (TTFT and TPOT visualizations) and a brief analysis of what's going on.
 - A table with Nsight profiling results showing top 3 kernel names and times
 - Identification (Screenshot) of the All-reduce kernel responsible for tensor parallel communication during multi-GPU inference
+- One paragraph discussing the difficulties or surprising results you have in this assignment.
 
 #### 2. Code
 - Modified `server.sh` file for the 2 multi-GPU scenarios
