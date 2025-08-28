@@ -100,7 +100,8 @@ Within the homework folder, we have provided `server.sh`, a script that starts a
 1. Allocate interactive GPU node using `salloc --nodes 1 --qos interactive --time 01:00:00 --constraint gpu --gpus 1 --account <projectID>`. One GPU is enough.
 2. Remember to make those scripts executable.
 3. Spawning two terminals would be useful, one for server and one for client. They should be on the same GPU node. Access the allocated node using `ssh <GPU_node_ID>` if the other terminal is on the login node.
-4. You need to login to Huggingface again on GPU nodes, and set `HF_HOME` to `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface`.
+4. You need to login to Huggingface again on GPU nodes, and set `HF_HOME` to `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface` for both server and client terminal.
+5. You might wait for several minutes until the serving engine is up and running.
 
 ### Task 2: Multi-GPU Benchmarking
 

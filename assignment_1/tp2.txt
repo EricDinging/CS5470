@@ -1,0 +1,99 @@
+Namespace(backend='vllm', base_url=None, host='localhost', port=8000, endpoint='/v1/completions', dataset=None, dataset_name='dummy', dataset_path=None, model='meta-llama/Llama-3.1-8B', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=25, sharegpt_output_len=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, request_rate=2.0, seed=0, trust_remote_code=False, disable_tqdm=False, save_result=False, metadata=None, result_dir=None, long_prompts=0, long_prompt_len=32000)
+Appending: 922, 441
+Appending: 1557, 313
+Appending: 1503, 782
+Appending: 18, 651
+Appending: 395, 129
+Appending: 381, 246
+Appending: 634, 818
+Appending: 2097, 439
+Appending: 33, 315
+Appending: 1751, 25
+Appending: 1176, 0
+Appending: 920, 301
+Appending: 1809, 416
+Appending: 1891, 513
+Appending: 193, 390
+Appending: 22, 465
+Appending: 3654, 623
+Appending: 2225, 398
+Appending: 2004, 321
+Appending: 22, 651
+Appending: 1412, 89
+Appending: 1040, 987
+Appending: 1911, 356
+Appending: 925, 407
+Appending: 2197, 441
+Starting initial single prompt test run..., url: http://localhost:8000/v1/completions
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: 2.0
+TTFT: 0.027219954994507134 TPOT: 0.01791422497742089 INPUT: 2225 OUTPUT: 398 LATENCY: 7139.167271030601 START: 274314.694540412
+TTFT: 0.02632189798168838 TPOT: 0.017932261339890003 INPUT: 925 OUTPUT: 407 LATENCY: 7306.82000197703 START: 274315.09363769
+TTFT: 0.08772691898047924 TPOT: 0.017540776080390515 INPUT: 3654 OUTPUT: 623 LATENCY: 10998.08964098338 START: 274315.722311233
+TTFT: 0.03198116394924 TPOT: 0.01871299496027253 INPUT: 1751 OUTPUT: 25 LATENCY: 481.0930429957807 START: 274316.184574638
+TTFT: 0.02885959600098431 TPOT: 0.01756590615294036 INPUT: 2097 OUTPUT: 439 LATENCY: 7722.726490988862 START: 274316.578482189
+TTFT: 0.02901469700736925 TPOT: 0.01724701756590214 INPUT: 1040 OUTPUT: 987 LATENCY: 17034.57401698688 START: 274316.857691186
+TTFT: 0.03510916401864961 TPOT: 0.01731227694455391 INPUT: 18 OUTPUT: 651 LATENCY: 11288.08917797869 START: 274317.377492273
+TTFT: 0.03872383403358981 TPOT: 0.017952002296624414 INPUT: 395 OUTPUT: 129 LATENCY: 2336.580128001515 START: 274317.665576996
+TTFT: 0.03291942703071982 TPOT: 0.017125202219114233 INPUT: 634 OUTPUT: 818 LATENCY: 14024.209640047047 START: 274318.778152445
+TTFT: 0.03700885799480602 TPOT: 0.017098063062462643 INPUT: 1891 OUTPUT: 513 LATENCY: 8791.21714597568 START: 274320.436410275
+TTFT: 0.025528061960358173 TPOT: 0.01709375280691099 INPUT: 922 OUTPUT: 441 LATENCY: 7546.779297001194 START: 274320.678899675
+TTFT: 0.02830106596229598 TPOT: 0.017086880659361245 INPUT: 33 OUTPUT: 315 LATENCY: 5393.581593001727 START: 274321.464028762
+TTFT: 0.03187995799817145 TPOT: 0.017068131959108127 INPUT: 2197 OUTPUT: 441 LATENCY: 7541.858020005748 START: 274322.26199672
+TTFT: 0.034955246024765074 TPOT: 0.017052007369213522 INPUT: 22 OUTPUT: 651 LATENCY: 11118.760036013555 START: 274323.561460451
+TTFT: 0.031076694023795426 TPOT: 0.017131262352519955 INPUT: 1557 OUTPUT: 313 LATENCY: 5376.030548010021 START: 274323.598789969
+TTFT: 0.03615201998036355 TPOT: 0.017170019489855564 INPUT: 381 OUTPUT: 246 LATENCY: 4242.806794994976 START: 274323.645411328
+TTFT: 0.025106588029302657 TPOT: 0.01711887343735725 INPUT: 2004 OUTPUT: 321 LATENCY: 5503.146087983623 START: 274323.656147532
+TTFT: 0.03940071299439296 TPOT: 0.01705623037782725 INPUT: 193 OUTPUT: 390 LATENCY: 6674.274329969194 START: 274324.551051661
+TTFT: 0.03335416904883459 TPOT: 0.017062605433756303 INPUT: 1911 OUTPUT: 356 LATENCY: 6090.579098032322 START: 274325.304743026
+TTFT: 0.025401808030437678 TPOT: 0.017038695136628423 INPUT: 920 OUTPUT: 301 LATENCY: 5137.010349018965 START: 274326.326294739
+TTFT: 0.04726738797035068 TPOT: 0.016989564122940715 INPUT: 1809 OUTPUT: 416 LATENCY: 7097.936498990748 START: 274328.249418216
+TTFT: 0.03921701799845323 TPOT: 0.016871664227272213 INPUT: 1412 OUTPUT: 89 LATENCY: 1523.923469998408 START: 274329.052966036
+TTFT: 0.033698624989483505 TPOT: 0.016981853760782917 INPUT: 22 OUTPUT: 465 LATENCY: 7913.278769992758 START: 274329.362846223
+TTFT: 0.033557291026227176 TPOT: 0.016854114880950503 INPUT: 1503 OUTPUT: 782 LATENCY: 13196.62101304857 START: 274330.122268562
+============ Serving Benchmark Result ============
+Successful requests:                     24        
+Benchmark duration (s):                  28.63     
+Total input tokens:                      29516     
+Total generated tokens:                  10517     
+Request throughput (req/s):              0.84      
+Input token throughput (tok/s):          1031.11   
+Output token throughput (tok/s):         367.40    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          34.99     
+Median TTFT (ms):                        33.14     
+P99 TTFT (ms):                           78.42     
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          17.29     
+Median TPOT (ms):                        17.11     
+P99 TPOT (ms):                           18.54     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           17.26     
+Median ITL (ms):                         17.03     
+P99 ITL (ms):                            19.67     
+==================================================
+
+(VllmWorker TP0 pid=1132267) 
+(VllmWorker TP0 pid=1132267) INFO 08-27 19:38:54 [default_loader.py:267] Loading weights took 11.88 seconds
+(VllmWorker TP1 pid=1132268) INFO 08-27 19:38:54 [default_loader.py:267] Loading weights took 11.65 seconds
+(VllmWorker TP0 pid=1132267) INFO 08-27 19:38:55 [gpu_model_runner.py:1983] Model loading took 7.5123 GiB and 13.078685 seconds
+(VllmWorker TP1 pid=1132268) INFO 08-27 19:38:55 [gpu_model_runner.py:1983] Model loading took 7.5123 GiB and 13.138833 seconds
+(VllmWorker TP0 pid=1132267) INFO 08-27 19:39:12 [gpu_worker.py:276] Available KV cache memory: 25.15 GiB
+(VllmWorker TP1 pid=1132268) INFO 08-27 19:39:12 [gpu_worker.py:276] Available KV cache memory: 25.15 GiB
+(EngineCore_0 pid=1132043) INFO 08-27 19:39:13 [kv_cache_utils.py:849] GPU KV cache size: 412,016 tokens
+(EngineCore_0 pid=1132043) INFO 08-27 19:39:13 [kv_cache_utils.py:853] Maximum concurrency for 131,072 tokens per request: 3.14x
+(EngineCore_0 pid=1132043) INFO 08-27 19:39:13 [kv_cache_utils.py:849] GPU KV cache size: 412,016 tokens
+(EngineCore_0 pid=1132043) INFO 08-27 19:39:13 [kv_cache_utils.py:853] Maximum concurrency for 131,072 tokens per request: 3.14x
+(EngineCore_0 pid=1132043) INFO 08-27 19:39:13 [core.py:215] init engine (profile, create kv cache, warmup model) took 17.97 seconds
+(EngineCore_0 pid=1132043) INFO 08-27 19:39:13 [__init__.py:3638] Cudagraph is disabled under eager mode
+(APIServer pid=1130356) INFO 08-27 19:39:14 [loggers.py:142] Engine 000: vllm cache_config_info with initialization after num_gpu_blocks is: 25751
+(APIServer pid=1130356) INFO 08-27 19:39:14 [async_llm.py:165] Torch profiler disabled. AsyncLLM CPU traces will not be collected.
+(APIServer pid=1130356) INFO 08-27 19:39:14 [api_server.py:1679] Supported_tasks: ['generate']
+(APIServer pid=1130356) WARNING 08-27 19:39:14 [__init__.py:1670] Default sampling parameters have been overridden by the model's Hugging Face generation config recommended from the model creator. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+(APIServer pid=1130356) INFO 08-27 19:39:14 [serving_responses.py:124] Using default chat sampling params from model: {'temperature': 0.6, 'top_p': 0.9}
+(APIServer pid=1130356) INFO 08-27 19:39:14 [serving_chat.py:135] Using default chat sampling params from model: {'temperature': 0.6, 'top_p': 0.9}
+(APIServer pid=1130356) INFO 08-27 19:39:14 [serving_completion.py:77] Using default completion sampling params from model: {'temperature': 0.6, 'top_p': 0.9}
+(APIServer pid=1130356) INFO 08-27 19:39:14 [api_server.py:1950] Starting vLLM API server 0 on http://0.0.0.0:8000
+
+INFO 08-27 19:41:06 [loggers.py:123] Engine 000: Avg prompt throughput: 1558.3 tokens/s, Avg generation throughput: 276.0 tokens/s, Running: 9 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.4%, Prefix cache hit rate: 81.2%
+
