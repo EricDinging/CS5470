@@ -137,7 +137,7 @@ Submit the following components:
 - All requested plots (TTFT and TPOT visualizations) and a brief analysis of what's going on.
 - A table with Nsight profiling results showing top 3 kernel names and times
 - Identification (Screenshot) of the All-reduce kernel responsible for tensor parallel communication during multi-GPU inference
-- One paragraph discussing the difficulties or surprising results you have experienced in this assignment.
+- One paragraph discussing the difficulties or surprising results you have in this assignment.
 
 #### 2. Code
 - Modified `server.sh` file for the 2 multi-GPU scenarios

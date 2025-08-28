@@ -10,7 +10,7 @@ headers = {
 your_question = "Where is Cornell University?"
 
 data = {
-    "model": "meta-llama/Llama-3.1-8B-Instruct",
+    "model": "meta-llama/Llama-3.1-8B",
     "prompt": f"""
               <|begin_of_text|><|start_header_id|>system<|end_header_id|>
               Cutting Knowledge Date: December 2023
