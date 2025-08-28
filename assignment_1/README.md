@@ -14,7 +14,7 @@ This homework focuses on setting up and benchmarking the vLLM inference server (
 ## Perequisites
 
 ### Hardware Access
-You will be provided access to the **Perlmutter HPC** where you can reserve a server with 4 A100 GPUs, each having 80 GB of memory. Follow the steps in the email to reserve servers.
+You will be provided access to the **Perlmutter HPC** where you can reserve a server with 4 A100 GPUs, each having 40 GB of memory.
 
 ### Setup Instructions
 
@@ -54,7 +54,6 @@ conda create -p /pscratch/sd/e/$USER/sysml python=3.10.12
 ``` -->
 #### Step 2: Huggingface access
 1. Create Huggingface account and request for model access. This could take hours if you haven't done it before.
-- `meta-llama/Llama-3.2-3B-Instruct`
 - `meta-llama/Llama-3.1-8B`
 2. Log in your account from command line
    ```bash
@@ -62,21 +61,15 @@ conda create -p /pscratch/sd/e/$USER/sysml python=3.10.12
    # Create token through the url and copy-paste
    ```
 #### Step 3: Download model and tokenizer
-This is required as vLLM could not download models on-the-fly on GPU nodes due to restrictions on large file download.
-
-<!-- In this assignment, we suggest using `Qwen/Qwen2.5-1.5B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB) and is not gated. However, feel free to use other models. -->
-
-In the first task, we are using `meta-llama/Llama-3.2-3B-Instruct` as it fits into the memory of one A100 on perlmutter (40GB). For later tasks, `meta-llama/Llama-3.1-8B` will be used.
+This is required as vLLM could not download models on-the-fly on Perlmutter GPU nodes due to restrictions on large file download.
 
 ```
-python download.py --model-id meta-llama/Llama-3.2-3B-Instruct ----cache-dir /pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface
-
 python download.py --model-id meta-llama/Llama-3.1-8B ----cache-dir /pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface
 ```
 
 **Note**: Due to disk space limitation on `home` file system, we encourage using `pscratch` for storing model weights. More information could be found [here](https://docs.nersc.gov/filesystems/perlmutter-scratch/).
 
-**Note**: remember to set environment variable `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface` in your running environment!
+**Note**: remember to set environment variable `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface` in your running environment such that HF library could select locally-cached model weights instead of pulling from remote repository.
 
 <!-- TODO Do we need this 
 
@@ -84,11 +77,11 @@ Copy the homework zip file into the vLLM source's root directory and uncompress 
 
 ## Homework Tasks
 
-This homework is designed to teach how to serve LLMs on modern GPUs. You will learn how to serve models that fit on a single GPU and how to serve models larger than a single GPU using tensor parallelism on multiple GPUs.
+This homework is designed to teach how to serve LLMs on modern GPUs. You will learn how to serve models that fit on a single GPU and how to serve models using tensor parallelism on multiple GPUs.
 
 ### Task 1: Single GPU Benchmarking
 
-Within the homework folder, we have provided `server.sh`, a script that starts a `meta-llama/Llama-3.2-3B-Instruct` instance on GPU 0 and exposes a vLLM API.
+Within the homework folder, we have provided `server.sh`, a script that starts a `meta-llama/Llama-3.1-8B` instance on GPU 0 and exposes a vLLM API.
 
 **Requirements:**
 1. Allocate a node with 1 GPU.
@@ -97,7 +90,7 @@ Within the homework folder, we have provided `server.sh`, a script that starts a
 4. Store the TTFT (Time To First Token) and TPOT (Time Per Output Token) for each prompt from the output
 
 **Hint:**
-1. Allocate interactive GPU node using `salloc --nodes 1 --qos interactive --time 01:00:00 --constraint gpu --gpus 1 --account <projectID>`. One GPU is enough.
+1. Allocate interactive GPU node using `salloc --nodes 1 --qos interactive --time 01:00:00 --constraint gpu --gpus 1 --account <projectID>`.
 2. Remember to make those scripts executable.
 3. Spawning two terminals would be useful, one for server and one for client. They should be on the same GPU node. Access the allocated node using `ssh <GPU_node_ID>` if the other terminal is on the login node.
 4. You need to login to Huggingface again on GPU nodes, and set `HF_HOME` to `HF_HOME=/pscratch/sd/<first_letter_of_usrname>/<usrname>/huggingface`.
@@ -107,15 +100,17 @@ Within the homework folder, we have provided `server.sh`, a script that starts a
 **Requirements:**
 1. Serve `meta-llama/Llama-3.1-8B` on 2 GPUs.
 2. Serve `meta-llama/Llama-3.1-8B` on 4 GPUs.
-3. Modify parameters in `server.sh` and `client.sh` files to execute these configurations.
+3. Modify parameters in `server.sh` to execute these configurations.
    - Review the vLLM documentation to understand what CLI arguments you need to add or modify for multi-GPU inference
 4. Store the TTFT and TPOT metrics for both configurations
 
 ### Task 3: Performance Visualization
 
 Create plots showing:
-1. Sorted TTFTs of prompts in the benchmark (for all three configurations: `meta-llama/Llama-3.2-3B-Instruct` with 1 GPU, `meta-llama/Llama-3.1-8B` with 2GPUs, `meta-llama/Llama-3.1-8B` with 4 GPUs)
-2. Sorted TPOTs of prompts in the benchmark (for all three configurations)
+1. Sorted TTFTs of prompts in the benchmark for all three configurations: serving with 1, 2, and 4 GPUs.
+2. Sorted TPOTs of prompts in the benchmark for all three configurations
+
+X-axis is the prompt index and the y-axis is TTFT or TTFT.
 
 ### Task 4: NVIDIA Nsight Profiling
 
@@ -133,12 +128,12 @@ Create plots showing:
 Submit the following components:
 
 #### 1. Report (PDF format)
-- All requested plots (TTFT and TPOT visualizations)
+- All requested plots (TTFT and TPOT visualizations) and a brief analysis.
 - A table with Nsight profiling results showing top 3 kernel names and times
-- Identification of the All-reduce kernel responsible for tensor parallel communication during multi-GPU inference
+- Identification (Screenshot) of the All-reduce kernel responsible for tensor parallel communication during multi-GPU inference
 
 #### 2. Code
-- Modified `server.sh` and `client.sh` files for the 2 multi-GPU scenarios
+- Modified `server.sh` file for the 2 multi-GPU scenarios
 - Python scripts for data parsing and visualization
 
 #### 3. Data Files
