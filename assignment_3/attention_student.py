@@ -23,33 +23,32 @@ def naive_strided_attention(q, k, v, stride):
     # Iterate over each item in the batch and each head
     for b in range(batch_size):
         for h in range(num_heads):
-            # Iterate over each query token
-            for i in range(seq_len):
-                q_vec = q[b, h, i, :]
-                
-                # --- Attention Score Calculation ---
-                scores = torch.zeros(seq_len, device=q.device)
-                # Only compute scores for strided keys
-                for j in range(0, seq_len, stride):
-                    k_vec = k[b, h, j, :]
-                    scores[j] = torch.dot(q_vec, k_vec) * scale
-                
-                # --- Softmax ---
-                # Mask out non-strided scores before softmax
-                mask = torch.full((seq_len,), float('-inf'), device=q.device)
-                mask[::stride] = 0
-                scores += mask
-                
-                attn_probs = torch.softmax(scores, dim=-1)
+            # (seq_len, head_dim)
+            q_bh = q[b, h]  # shape [seq_len, head_dim]
+            k_bh = k[b, h]  # shape [seq_len, head_dim]
+            v_bh = v[b, h]  # shape [seq_len, head_dim]
 
-                # --- Weighted Sum of Values ---
-                out_vec = torch.zeros(head_dim, device=q.device)
-                for j in range(0, seq_len, stride):
-                    v_vec = v[b, h, j, :]
-                    out_vec += attn_probs[j] * v_vec
-                
-                output[b, h, i, :] = out_vec
-                
+            # --- Attention Score Calculation ---
+            # Compute full attention scores and scale
+            scores = torch.matmul(q_bh, k_bh.transpose(-2, -1)) * scale  # shape [seq_len, seq_len]
+
+            # Mask out non-strided keys before softmax
+            mask = torch.full_like(scores, float('-inf'))
+            mask[:, ::stride] = 0
+            scores = scores + mask
+
+            # --- Softmax ---
+            # Shift for numerical stability
+            max_scores = scores.max(dim=-1, keepdim=True).values
+            shifted = scores - max_scores
+            exps = torch.exp(shifted)
+            sums = exps.sum(dim=-1, keepdim=True) + 1e-6
+            weights = exps / sums
+            
+            # --- Weighted Sum of Values ---
+            out_bh = torch.matmul(weights, v_bh)  # shape [seq_len, head_dim]
+            output[b, h] = out_bh
+
     return output
 
 

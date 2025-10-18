@@ -13,12 +13,12 @@ def test_correctness(device):
     num_heads = 1#4
     stride = 1#2
     
+    torch.manual_seed(0)
     # Use float64 for high precision checking
     model = SimpleModel(embed_dim, num_heads, stride).to(device).double()
     model.eval()
 
     # Create random input
-    torch.manual_seed(0)
     x = torch.randn(batch_size, seq_len, embed_dim, device=device, dtype=torch.double)
     
     # Get the Q, K, V projections to test the attention module directly
