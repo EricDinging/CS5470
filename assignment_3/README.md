@@ -42,7 +42,7 @@ For example, with a stride of 2, query `q_i` attends to keys `k_0, k_2, k_4, ...
     * **Parallel Reduction**: The dot product and the final weighted sum of values are reduction operations. How do you perform these in parallel?
 3.  **Integrate the Kernel**: In `attention_student.py`, complete the `forward` method of the `CustomStridedAttention` class to call your compiled CUDA kernel.
 4.  **Test for Correctness**: Run `python test.py --mode=correctness`. This will run a small test case and assert that the output of your kernel matches the naive PyTorch implementation. Debug any discrepancies.
-5.  **Benchmark Performance**: Once your implementation is correct, run `python test.py --mode=benchmark`. This will run a larger test case and report the execution time of both the naive and your custom implementation. Analyze the results in your report.
+5.  **Benchmark Performance**: Once your implementation is correct, run `python test.py --mode=benchmark`. This will run a larger test case and report the execution time of both the naive and your custom implementation.
 
 ## Preparation
 
